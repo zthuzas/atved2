@@ -1,0 +1,95 @@
+#include<stdio.h>
+
+using namespace std;
+
+struct Funcionario {
+
+    char nome[100], cargo[50];
+    double salarioBase, beneficios, descontos, salario;
+
+    void ler () {
+        printf("Escreva o nome do funcionario\n").
+        scanf("%[^\n]%*c", nome);
+        printf("Escreva o nome do seu cargo\n");
+        scanf("%[^\n]%*c", cargo);
+        printf("Para calcular o salario, informe o piso salarial, beneficios e os descontos, respectivamente.\n");
+        scanf("%lf %lf %lf%*c", &salarioBase, &beneficios, &descontos);
+        salario = salarioBase + beneficios - descontos;
+    }
+
+    void imprimir() {
+        printf("%s\n", nome);
+        printf("%s\n", cargo);
+        printf("Salario Base: R$ %.2lf\n", salarioBase);
+        printf("Beneficios: R$ %.2lf\n", beneficios);
+        printf("Descontos: R$ %.2lf\n", descontos);
+        printf("Salario Final: R$ %.2lf\n", salario);
+    }
+
+};
+
+struct Loja {
+
+    Funcionario f[10];
+    int ultimoFuncionario;
+    double totalSalarios, maior;
+
+    Loja() {
+        ultimoFuncionario = 0;
+        totalSalarios = 0;
+        maior = 0;
+    }
+
+    void ler() {
+        f[ultimoFuncionario].ler();
+        totalSalarios += f[ultimoFuncionario].salario;
+        if (f[ultimoFuncionario].salario > maior) {
+            maior = f[ultimoFuncionario].salario;
+        }
+        ultimoFuncionario++;
+    }
+
+    void listarTodos() {
+        for (int i = 0; i < ultimoFuncionario; i++) {
+            f[i].imprimir();
+        }
+    }
+
+    double mediaSalarial() {
+        if (ultimoFuncionario == 0) {
+            return 0;
+        }
+        return totalSalarios / ultimoFuncionario;
+    }
+
+    double maiorSalario() {
+        return maior;
+    }
+
+};
+int main() {
+
+    Loja l;
+
+    int escolha;
+
+    do {
+        printf("1. Cadasto\n");
+        printf("2. Lista\n");
+        printf("3. Media Salarial da loja\n");
+        printf("4. Maior Salario da loja\n");
+        scanf("%d%*c", &escolha);
+
+        if (escolha == 1) {
+            l.ler();
+        } else if (escolha == 2) {
+            l.listarTodos();
+        } else if (escolha == 3) {
+            printf("R$ %.2lf\n", l.mediaSalarial());
+        } else if (escolha == 4) {
+            printf("R$ %.2lf\n", l.maiorSalario());
+        }
+
+    } while (escolha == 1 || escolha == 2 || escolha == 3 || escolha == 4);
+    return 0;
+}
